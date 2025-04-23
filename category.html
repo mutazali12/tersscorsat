@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ترس للكورسات - التخصص</title>
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.22.9/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #a855f7, #3b82f6);
+      min-height: 100vh;
+    }
+    .gradient-text {
+      background: linear-gradient(90deg, #a855f7, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .section-container {
+      background: #ffffff;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body class="text-gray-800">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    // Header Component
+    function Header() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get('cat') || 'unknown';
+      const categoryNames = {
+        civil: 'الهندسة المدنية',
+        mechanical: 'الهندسة الميكانيكية',
+        electrical: 'الهندسة الكهربائية',
+        chemical: 'الهندسة الكيميائية',
+        architectural: 'الهندسة المعمارية',
+        industrial: 'الهندسة الصناعية',
+        aerospace: 'الهندسة الجوية',
+        petroleum: 'هندسة البترول',
+        programming: 'البرمجة',
+        software: 'شروحات البرامج'
+      };
+      return (
+        <header className="py-16 bg-gradient-to-r from-purple-900 to-blue-900 text-white text-center">
+          <h1 className="text-4xl md:text-5xl font-bold gradient-text">كورسات {categoryNames[category]}</h1>
+          <p className="text-xl mt-4">استكشف مجموعة واسعة من الكورسات المعتمدة</p>
+        </header>
+      );
+    }
+
+    // Courses Component
+    function Courses() {
+      const [visibleCourses, setVisibleCourses] = useState(20);
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get('cat') || 'civil';
+
+      const courses = Array.from({ length: 150 }, (_, i) => ({
+        id: i + 1,
+        image: `images/${category}/${i + 1}.jpg`,
+        price: '500 جنيه',
+        link: '#'
+      }));
+
+      const loadMore = () => {
+        setVisibleCourses((prev) => Math.min(prev + 20, 150));
+      };
+
+      return (
+        <section className="py-16">
+          <div className="container">
+            <div className="section-container">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {courses.slice(0, visibleCourses).map((course) => (
+                  <a href={course.link} key={course.id} className="card">
+                    <img
+                      src={course.image}
+                      alt={`كورس ${course.id}`}
+                      className="w-full h-64 object-cover rounded-lg"
+                    />
+                    <p className="mt-2 text-center text-lg font-semibold">السعر: {course.price}</p>
+                  </a>
+                ))}
+              </div>
+              {visibleCourses < courses.length && (
+                <div className="text-center mt-8">
+                  <button
+                    onClick={loadMore}
+                    className="bg-gradient-to-r from-purple-500 to-blue-500 text-white py-2 px-4 rounded-full hover:scale-105 transition-transform"
+                  >
+                    المزيد
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // Footer Component
+    function Footer() {
+      return (
+        <footer className="py-10 bg-gradient-to-r from-purple-900 to-blue-900 text-white text-center">
+          <h3 className="text-xl font-semibold gradient-text">ترس للكورسات</h3>
+          <p className="mt-4 text-sm">© 2025 ترس للكورسات - جميع الحقوق محفوظة</p>
+        </footer>
+      );
+    }
+
+    // Main App Component
+    function App() {
+      return (
+        <div>
+          <Header />
+          <Courses />
+          <Footer />
+        </div>
+      );
+    }
+
+    // Render App
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
