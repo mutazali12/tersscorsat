@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ترس للكورسات - كورسات يودمي الهندسية المعتمدة</title>
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.22.9/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=BAAngHuuon87MnOKw--9Z_7WaBRrlC2VHazdYJ89g0rc6S4S2Viynbcg9sK7RsrzTOxV1nstty5ZX9-mj0&components=hosted-buttons&disable-funding=venmo&currency=USD"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #a855f7, #3b82f6);
+      min-height: 100vh;
+    }
+    .gradient-text {
+      background: linear-gradient(90deg, #a855f7, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    .scroll-container {
+      display: flex;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 1rem 0;
+      cursor: grab;
+    }
+    .scroll-container::-webkit-scrollbar {
+      height: 8px;
+    }
+    .scroll-container::-webkit-scrollbar-thumb {
+      background: #a855f7;
+      border-radius: 4px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .section-container {
+      background: #ffffff;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+    .whatsapp-icon {
+      transition: all 0.3s ease;
+    }
+    .whatsapp-icon:hover {
+      transform: scale(1.2);
+      filter: drop-shadow(0 0 10px #22c55e);
+    }
+    .payment-curtain {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .payment-content {
+      background: linear-gradient(135deg, #3b82f6, #9333ea);
+      padding: 2rem;
+      border-radius: 1rem;
+      max-width: 90%;
+      text-align: center;
+      color: #f1f5f9;
+    }
+  </style>
+</head>
+<body class="text-gray-800">
+  <div id="root"></div>
+
+  <div class="payment-curtain" id="paymentCurtain">
+    <div class="payment-content">
+      <h2 class="text-2xl font-bold mb-4 gradient-text">وسائل الدفع المتاحة</h2>
+      <p class="mb-4">يمكنك الدفع باستخدام أي من الطرق التالية:</p>
+      <ul class="list-disc pr-6 text-right">
+        <li>حساب مح POLITICSظة اتصالات: <span class="font-mono">01122394912</span></li>
+        <li>حساب بنك الخرطوم: <span class="font-mono">3296130</span></li>
+        <li>حساب بنك فيصل: <span class="font-mono">51253286</span></li>
+        <li>PayPal:</li>
+      </ul>
+      <div id="paypal-container-HRPRPNKPNRMZN" class="mt-4"></div>
+      <button id="closeCurtain" class="mt-6 px-6 py-2 bg-red-500 rounded-full text-white font-semibold">إغلاق</button>
+    </div>
+  </div>
+
+  <script type="text/babel">
+    const { useEffect, useRef } = React;
+
+    // Header Component
+    function Header() {
+      return (
+        <header className="h-screen flex flex-col justify-center text-center bg-gradient-to-r from-purple-900 to-blue-900 text-white">
+          <div className="bg-white bg-opacity-80 p-8 rounded-lg shadow-lg mx-auto">
+            <h1 className="text-4xl md:text-5xl font-bold gradient-text">ترس للكورسات</h1>
+            <p className="text-xl md:text-2xl mt-4">كورسات يودمي الهندسية المعتمدة بجودة عالية</p>
+            <a href="#categories" className="mt-6 inline-block bg-gradient-to-r from-purple-500 to-blue-500 text-white py-3 px-6 rounded-full hover:scale-105 transition-transform">استكشف الكورسات</a>
+          </div>
+        </header>
+      );
+    }
+
+    // Categories Component
+    function Categories() {
+      const categories = [
+        { id: 'civil', name: 'الهندسة المدنية', link: 'category.html?cat=civil' },
+        { id: 'mechanical', name: 'الهندسة الميكانيكية', link: 'category.html?cat=mechanical' },
+        { id: 'electrical', name: 'الهندسة الكهربائية', link: 'category.html?cat=electrical' },
+        { id: 'chemical', name: 'الهندسة الكيميائية', link: 'category.html?cat=chemical' },
+        { id: 'architectural', name: 'الهندسة المعمارية', link: 'category.html?cat=architectural' },
+        { id: 'industrial', name: 'الهندسة الصناعية', link: 'category.html?cat=industrial' },
+        { id: 'aerospace', name: 'الهندسة الجوية', link: 'category.html?cat=aerospace' },
+        { id: 'petroleum', name: 'هندسة البترول', link: 'category.html?cat=petroleum' },
+        { id: 'programming', name: 'البرمجة', link: 'category.html?cat=programming' },
+        { id: 'software', name: 'شروحات البرامج', link: 'category.html?cat=software' }
+      ];
+
+      const setupDragScroll = (ref) => {
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        ref.current.addEventListener('mousedown', (e) => {
+          isDown = true;
+          ref.current.style.cursor = 'grabbing';
+          startX = e.pageX - ref.current.offsetLeft;
+          scrollLeft = ref.current.scrollLeft;
+        });
+
+        ref.current.addEventListener('mouseleave', () => {
+          isDown = false;
+          ref.current.style.cursor = 'grab';
+        });
+
+        ref.current.addEventListener('mouseup', () => {
+          isDown = false;
+          ref.current.style.cursor = 'grab';
+        });
+
+        ref.current.addEventListener('mousemove', (e) => {
+          if (!isDown) return;
+          e.preventDefault();
+          const x = e.pageX - ref.current.offsetLeft;
+          const walk = (x - startX) * 2;
+          ref.current.scrollLeft = scrollLeft - walk;
+        });
+
+        ref.current.addEventListener('touchstart', (e) => {
+          startX = e.touches[0].pageX - ref.current.offsetLeft;
+          scrollLeft = ref.current.scrollLeft;
+        });
+
+        ref.current.addEventListener('touchmove', (e) => {
+          const x = e.touches[0].pageX - ref.current.offsetLeft;
+          const walk = (x - startX) * 2;
+          ref.current.scrollLeft = scrollLeft - walk;
+        });
+      };
+
+      return (
+        <section id="categories" className="py-16">
+          <div className="container">
+            {categories.map((category) => (
+              <div key={category.id} className="section-container mb-8">
+                <h2 className="text-3xl font-bold text-center gradient-text mb-6">{category.name}</h2>
+                <div ref={(ref) => ref && setupDragScroll(ref)} className="scroll-container">
+                  {[1, 2, 3, 4].map((num) => (
+                    <a href={category.link} key={num} className="card mx-2 flex-shrink-0">
+                      <img
+                        src={`images/${category.id}/${num}.jpg`}
+                        alt={`كورس ${num}`}
+                        className="w-48 h-64 object-cover rounded-lg"
+                      />
+                    </a>
+                  ))}
+                </div>
+                <div className="text-center mt-4">
+                  <a
+                    href={category.link}
+                    className="inline-block bg-gradient-to-r from-purple-500 to-blue-500 text-white py-2 px-4 rounded-full hover:scale-105 transition-transform"
+                  >
+                    المزيد
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    // Payment Section Component
+    function PaymentSection() {
+      const openCurtain = () => {
+        const curtain = document.getElementById('paymentCurtain');
+        curtain.style.display = 'flex';
+        gsap.from(".payment-content", {
+          y: -100,
+          opacity: 0,
+          duration: 0.8,
+          ease: "bounce.out",
+        });
+      };
+
+      useEffect(() => {
+        paypal.HostedButtons({
+          hostedButtonId: "HRPRPNKPNRMZN",
+        }).render("#paypal-container-HRPRPNKPNRMZN");
+
+        const closeCurtain = document.getElementById('closeCurtain');
+        closeCurtain.addEventListener('click', () => {
+          const curtain = document.getElementById('paymentCurtain');
+          gsap.to(".payment-content", {
+            y: -100,
+            opacity: 0,
+            duration: 0.5,
+            ease: "power2.in",
+            onComplete: () => {
+              curtain.style.display = 'none';
+            },
+          });
+        });
+      }, []);
+
+      return (
+        <section className="py-16">
+          <div className="container">
+            <div className="section-container text-center">
+              <h2 className="text-3xl font-bold gradient-text mb-6">وسائل الدفع</h2>
+              <button
+                onClick={openCurtain}
+                className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-white font-semibold hover:shadow-lg transition"
+              >
+                عرض وسائل الدفع
+              </button>
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // Footer Component
+    function Footer() {
+      return (
+        <footer className="py-10 bg-gradient-to-r from-purple-900 to-blue-900 text-white text-center">
+          <h3 className="text-xl font-semibold gradient-text">ترس للكورسات</h3>
+          <p className="mt-4 text-sm">تواصلوا معنا للحصول على الكورسات</p>
+          <div className="flex justify-center gap-4 mt-4">
+            <a href="https://wa.me/201287027277" target="_blank">
+              <svg className="whatsapp-icon w-10 h-10 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.134.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.571-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.447h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </a>
+            <a href="https://wa.me/249912500618" target="_blank">
+              <svg className="whatsapp-icon w-10 h-10 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.134.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.571-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.447h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+            </a>
+          </div>
+          <p className="mt-4 text-sm">© 2025 ترس للكورسات - جميع الحقوق محفوظة</p>
+        </footer>
+      );
+    }
+
+    // Main App Component
+    function App() {
+      useEffect(() => {
+        gsap.from(".card", {
+          opacity: 0,
+          y: 50,
+          stagger: 0.3,
+          duration: 1,
+          ease: "power3.out",
+        });
+      }, []);
+
+      return (
+        <div>
+          <Header />
+          <Categories />
+          <PaymentSection />
+          <Footer />
+        </div>
+      );
+    }
+
+    // Render App
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
