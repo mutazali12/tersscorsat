@@ -8,8 +8,6 @@
   <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.22.9/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
-  <script src="https://www.paypal.com/sdk/js?client-id=BAAngHuuon87MnOKw--9Z_7WaBRrlC2VHazdYJ89g0rc6S4S2Viynbcg9sK7RsrzTOxV1nstty5ZX9-mj0&components=hosted-buttons&disable-funding=venmo&currency=USD"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
   <style>
@@ -31,20 +29,6 @@
       transform: translateY(-5px);
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
-    .scroll-container {
-      display: flex;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding: 1rem 0;
-      cursor: grab;
-    }
-    .scroll-container::-webkit-scrollbar {
-      height: 8px;
-    }
-    .scroll-container::-webkit-scrollbar-thumb {
-      background: #a855f7;
-      border-radius: 4px;
-    }
     .container {
       max-width: 1200px;
       margin: 0 auto;
@@ -64,58 +48,26 @@
       transform: scale(1.2);
       filter: drop-shadow(0 0 10px #22c55e);
     }
-    .payment-curtain {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-    }
-    .payment-content {
-      background: linear-gradient(135deg, #3b82f6, #9333ea);
-      padding: 2rem;
-      border-radius: 1rem;
-      max-width: 90%;
-      text-align: center;
-      color: #f1f5f9;
-    }
   </style>
 </head>
 <body class="text-gray-800">
   <div id="root"></div>
 
-  <div class="payment-curtain" id="paymentCurtain">
-    <div class="payment-content">
-      <h2 class="text-2xl font-bold mb-4 gradient-text">وسائل الدفع المتاحة</h2>
-      <p class="mb-4">يمكنك الدفع باستخدام أي من الطرق التالية:</p>
-      <ul class="list-disc pr-6 text-right">
-        <li>حساب مح POLITICSظة اتصالات: <span class="font-mono">01122394912</span></li>
-        <li>حساب بنك الخرطوم: <span class="font-mono">3296130</span></li>
-        <li>حساب بنك فيصل: <span class="font-mono">51253286</span></li>
-        <li>PayPal:</li>
-      </ul>
-      <div id="paypal-container-HRPRPNKPNRMZN" class="mt-4"></div>
-      <button id="closeCurtain" class="mt-6 px-6 py-2 bg-red-500 rounded-full text-white font-semibold">إغلاق</button>
-    </div>
-  </div>
-
   <script type="text/babel">
-    const { useEffect, useRef } = React;
+    const { useState } = React;
 
     // Header Component
     function Header() {
       return (
-        <header className="h-screen flex flex-col justify-center text-center bg-gradient-to-r from-purple-900 to-blue-900 text-white">
-          <div className="bg-white bg-opacity-80 p-8 rounded-lg shadow-lg mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold gradient-text">ترس للكورسات</h1>
-            <p className="text-xl md:text-2xl mt-4">كورسات يودمي الهندسية المعتمدة بجودة عالية</p>
-            <a href="#categories" className="mt-6 inline-block bg-gradient-to-r from-purple-500 to-blue-500 text-white py-3 px-6 rounded-full hover:scale-105 transition-transform">استكشف الكورسات</a>
-          </div>
+        <header className="py-16 bg-gradient-to-r from-purple-900 to-blue-900 text-white text-center">
+          <h1 className="text-4xl md:text-5xl font-bold gradient-text">ترس للكورسات</h1>
+          <p className="text-xl mt-4">كورسات يودمي الهندسية المعتمدة بجودة عالية</p>
+          <a
+            href="#categories"
+            className="mt-6 inline-block bg-gradient-to-r from-purple-500 to-blue-500 text-white py-3 px-6 rounded-full hover:scale-105 transition-transform"
+          >
+            استكشف الكورسات
+          </a>
         </header>
       );
     }
@@ -135,61 +87,20 @@
         { id: 'software', name: 'شروحات البرامج', link: 'category.html?cat=software' }
       ];
 
-      const setupDragScroll = (ref) => {
-        let isDown = false;
-        let startX;
-        let scrollLeft;
-
-        ref.current.addEventListener('mousedown', (e) => {
-          isDown = true;
-          ref.current.style.cursor = 'grabbing';
-          startX = e.pageX - ref.current.offsetLeft;
-          scrollLeft = ref.current.scrollLeft;
-        });
-
-        ref.current.addEventListener('mouseleave', () => {
-          isDown = false;
-          ref.current.style.cursor = 'grab';
-        });
-
-        ref.current.addEventListener('mouseup', () => {
-          isDown = false;
-          ref.current.style.cursor = 'grab';
-        });
-
-        ref.current.addEventListener('mousemove', (e) => {
-          if (!isDown) return;
-          e.preventDefault();
-          const x = e.pageX - ref.current.offsetLeft;
-          const walk = (x - startX) * 2;
-          ref.current.scrollLeft = scrollLeft - walk;
-        });
-
-        ref.current.addEventListener('touchstart', (e) => {
-          startX = e.touches[0].pageX - ref.current.offsetLeft;
-          scrollLeft = ref.current.scrollLeft;
-        });
-
-        ref.current.addEventListener('touchmove', (e) => {
-          const x = e.touches[0].pageX - ref.current.offsetLeft;
-          const walk = (x - startX) * 2;
-          ref.current.scrollLeft = scrollLeft - walk;
-        });
-      };
-
       return (
         <section id="categories" className="py-16">
           <div className="container">
             {categories.map((category) => (
               <div key={category.id} className="section-container mb-8">
                 <h2 className="text-3xl font-bold text-center gradient-text mb-6">{category.name}</h2>
-                <div ref={(ref) => ref && setupDragScroll(ref)} className="scroll-container">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   {[1, 2, 3, 4].map((num) => (
-                    <a href={category.link} key={num} className="card mx-2 flex-shrink-0">
+                    <a href={category.link} key={num} className="card">
                       <img
                         src={`images/${category.id}/${num}.jpg`}
                         alt={`كورس ${num}`}
-                        className="w-48 h-64 object-cover rounded-lg"
+                        className="w-full h-64 object-cover rounded-lg"
+                        onError={(e) => { e.target.src = 'https://via.placeholder.com/150'; }} // صورة بديلة
                       />
                     </a>
                   ))}
@@ -211,36 +122,11 @@
 
     // Payment Section Component
     function PaymentSection() {
-      const openCurtain = () => {
-        const curtain = document.getElementById('paymentCurtain');
-        curtain.style.display = 'flex';
-        gsap.from(".payment-content", {
-          y: -100,
-          opacity: 0,
-          duration: 0.8,
-          ease: "bounce.out",
-        });
+      const [isOpen, setIsOpen] = useState(false);
+
+      const toggleCurtain = () => {
+        setIsOpen(!isOpen);
       };
-
-      useEffect(() => {
-        paypal.HostedButtons({
-          hostedButtonId: "HRPRPNKPNRMZN",
-        }).render("#paypal-container-HRPRPNKPNRMZN");
-
-        const closeCurtain = document.getElementById('closeCurtain');
-        closeCurtain.addEventListener('click', () => {
-          const curtain = document.getElementById('paymentCurtain');
-          gsap.to(".payment-content", {
-            y: -100,
-            opacity: 0,
-            duration: 0.5,
-            ease: "power2.in",
-            onComplete: () => {
-              curtain.style.display = 'none';
-            },
-          });
-        });
-      }, []);
 
       return (
         <section className="py-16">
@@ -248,13 +134,33 @@
             <div className="section-container text-center">
               <h2 className="text-3xl font-bold gradient-text mb-6">وسائل الدفع</h2>
               <button
-                onClick={openCurtain}
+                onClick={toggleCurtain}
                 className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-white font-semibold hover:shadow-lg transition"
               >
                 عرض وسائل الدفع
               </button>
             </div>
           </div>
+          {isOpen && (
+            <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 flex items-center justify-center z-50">
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 rounded-lg text-white max-w-lg">
+                <h2 className="text-2xl font-bold gradient-text mb-4">وسائل الدفع المتاحة</h2>
+                <p className="mb-4">يمكنك الدفع باستخدام أي من الطرق التالية:</p>
+                <ul className="list-disc pr-6 text-right">
+                  <li>حساب محفظة اتصالات: <span className="font-mono">01122394912</span></li>
+                  <li>حساب بنك الخرطوم: <span className="font-mono">3296130</span></li>
+                  <li>حساب بنك فيصل: <span className="font-mono">51253286</span></li>
+                  <li>PayPal: تواصلوا معنا للحصول على التفاصيل</li>
+                </ul>
+                <button
+                  onClick={toggleCurtain}
+                  className="mt-6 px-6 py-2 bg-red-500 rounded-full text-white font-semibold"
+                >
+                  إغلاق
+                </button>
+              </div>
+            </div>
+          )}
         </section>
       );
     }
@@ -284,16 +190,6 @@
 
     // Main App Component
     function App() {
-      useEffect(() => {
-        gsap.from(".card", {
-          opacity: 0,
-          y: 50,
-          stagger: 0.3,
-          duration: 1,
-          ease: "power3.out",
-        });
-      }, []);
-
       return (
         <div>
           <Header />
