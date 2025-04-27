@@ -89,45 +89,50 @@
     .whatsapp-button i {
       margin-left: 5px;
     }
-    /* Animated Header Styles */
-    .header-slider {
+    /* Header Styles */
+    .header-section {
+      width: 100%;
+      background: linear-gradient(135deg, #a855f7, #3b82f6);
+      overflow: hidden;
+    }
+    .header-image-container {
       position: relative;
       width: 100%;
-      padding-top: 25%; /* 300 / 1200 = 0.25 (4:1 aspect ratio) */
-      overflow: hidden;
-      background: linear-gradient(135deg, #a855f7, #3b82f6);
+      padding-top: 25%; /* 4:1 aspect ratio (300 / 1200 = 0.25) */
     }
-    .slider-track {
+    .header-image {
       position: absolute;
       top: 0;
       left: 0;
-      display: flex;
-      width: 300%; /* 3 images */
-      height: 100%;
-      animation: slide 15s infinite linear;
-    }
-    .slide {
-      flex: 1;
-      height: 100%;
-    }
-    .slide img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-    @keyframes slide {
-      0% { transform: translateX(0); }
-      33.33% { transform: translateX(-33.33%); }
-      66.66% { transform: translateX(-66.66%); }
-      100% { transform: translateX(0); }
-    }
     .header-content {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
       text-align: center;
       color: white;
+      padding: 1rem 0;
+      background: linear-gradient(135deg, #a855f7, #3b82f6); /* Match the gradient background */
+    }
+    /* Download App Button Styles */
+    .download-app-button {
+      display: inline-flex;
+      align-items: center;
+      background: #ffffff;
+      color: #3b82f6;
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .download-app-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
+    .download-app-button i {
+      margin-left: 8px;
     }
   </style>
 </head>
@@ -137,27 +142,39 @@
   <script type="text/babel">
     const { useState } = React;
 
-    // Header Component with Animated Slider
+    // Header Component
     function Header() {
       return (
-        <header className="header-slider">
-          <div className="slider-track">
-            <div className="slide">
-              <img src="header.png" alt="Slide 1" />
-            </div>
-            <div className="slide">
-              <img src="header.png" alt="Slide 2" />
-            </div>
-            <div className="slide">
-              <img src="header.png" alt="Slide 3" />
-            </div>
+        <header className="header-section">
+          <div className="header-image-container">
+            <img src="header.png" alt="Header Image" className="header-image" />
           </div>
           <div className="header-content">
             <h1 className="text-4xl md:text-5xl font-bold gradient-text">ترس للكورسات</h1>
             <p className="text-xl mt-4">كورسات يودمي الهندسية المعتمدة بجودة عالية</p>
+            <div className="mt-6 flex justify-center gap-4">
+              <a
+                href="https://wa.me/201287027277"
+                className="inline-flex items-center bg-[#FF0000] text-white py-2 px-4 rounded-lg hover:scale-105 transition-transform"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                تواصلوا معنا
+                <i className="fab fa-whatsapp ml-2"></i>
+              </a>
+              <a
+                href="https://wa.me/249912500618"
+                className="inline-flex items-center bg-[#FF0000] text-white py-2 px-4 rounded-lg hover:scale-105 transition-transform"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                تواصل بالواتساب
+                <i className="fab fa-whatsapp ml-2"></i>
+              </a>
+            </div>
             <a
               href="#categories"
-              className="mt-6 inline-block bg-gradient-to-r from-purple-500 to-blue-500 text-white py-3 px-6 rounded-full hover:scale-105 transition-transform"
+              className="mt-4 inline-block bg-gradient-to-r from-purple-500 to-blue-500 text-white py-3 px-6 rounded-full hover:scale-105 transition-transform"
             >
               استكشف الكورسات
             </a>
@@ -299,6 +316,12 @@
               <svg className="whatsapp-icon w-10 h-10 text-green-500" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.134.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.571-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.447h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
               </svg>
+            </a>
+          </div>
+          <div className="mt-6">
+            <a href="#" className="download-app-button">
+              تحميل التطبيق
+              <i className="fas fa-download"></i>
             </a>
           </div>
           <p className="mt-4 text-sm">© 2025 ترس للكورسات - جميع الحقوق محفوظة</p>
