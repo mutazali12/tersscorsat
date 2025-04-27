@@ -24,7 +24,9 @@
     }
     .card {
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative; /* For positioning the price and WhatsApp icon */
+      background: #ffffff;
+      border-radius: 0.5rem;
+      overflow: hidden;
     }
     .card:hover {
       transform: translateY(-5px);
@@ -54,23 +56,20 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 0.5rem;
+      border-radius: 0.5rem 0.5rem 0 0; /* Rounded top corners only */
     }
-    .price-overlay {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
+    .course-details {
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .price-text {
+      color: #1f2937;
       font-size: 1rem;
       font-weight: bold;
     }
     .whatsapp-button {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
       display: flex;
       align-items: center;
       background: #25D366;
@@ -145,7 +144,9 @@
                         alt={`كورس ${course.id}`}
                         className="course-image"
                       />
-                      <div className="price-overlay">السعر: {course.price}</div>
+                    </div>
+                    <div className="course-details">
+                      <span className="price-text">السعر: {course.price}</span>
                       <a
                         href={`https://wa.me/201287027277?text=أريد طلب الكورس`}
                         className="whatsapp-button"
